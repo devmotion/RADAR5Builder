@@ -1,0 +1,39 @@
+language: julia
+os:
+  - linux
+julia:
+  - 1.0
+notifications:
+  email: false
+git:
+  depth: 99999999
+cache:
+  timeout: 1000
+  directories:
+    - downloads
+env:
+  global:
+    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+    - BINARYBUILDER_AUTOMATIC_APPLE=true
+sudo: required
+
+# Before anything else, get the latest version of things
+before_script:
+- julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
+
+script:
+- julia build_tarballs.jl
+
+
+deploy:
+  provider: releases
+  api_key:
+    # Note; this api_key is only valid for devmotion/RADAR5Builder; you need
+    # to make your own: https://docs.travis-ci.com/user/deployment/releases/
+    secure: 04Z8lz73B0MUrGojS4j8eaKFyYt249raKuYB7PzF3WJuuJsGZgAU3AowTJpJnNyHxbsnGLjfiCH1tLEWkRP5j2h9pdKOX3ORiq5NvznS42kqS7A+IrzqCwzQoV3J0GyHciAD/nfgUs4WR1xZ+8cdUrjWRqeqvJinnfLeeMode5GmQCGpO0x2vnYwGPdTVjcTr1mqDyVSk8WALC41g3p4g93AMB/Yi4vGCR1qRSmGP4mnFvMMV8TgYKtXsyrAZab/9YNUDbhWFgv2zyNjha5THYteo32pshfUo3sCDNlQ6AiPqk/zPzUlGyIBlemMR19H/kb95XJuLqbIAtL5RXSwpb3Uan6yBcxNsKfgpGiVf1iD1/qKtfRdDpgPve9oy3MKi00U8JAGjqBUbQxthHuYCT0Gqb7sROjzuYWMaqs4IKPPuctfTg8b+ZXV3VYNXlHu9i7HWjYuKkXBLQ3ivQoEUsWYp9NaQSbotfB63Xktn3807ibuxVs5YRiXsFkaLpJo7OrH97RAEE+3NPzsHr8rvEOg6ai4vAMmu8eArEPobMNS6K80lzqbuYv56VlD95IARD5AnqPWabMp771G48u1zynRFCPq0dZd/phQ6sSdFrQ5HiSdjqdpyEx6Uw9AceT4nmE/aBlmQW2cDZ6IOb4CYmn7SNTM/KleDIk+3+oZZYw=
+  file_glob: true
+  file: products/*
+  skip_cleanup: true
+  on:
+    repo: devmotion/RADAR5Builder
+    tags: true

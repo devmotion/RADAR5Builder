@@ -3,7 +3,7 @@
 using BinaryBuilder
 
 name = "RADAR5Builder"
-version = v"0.0.1"
+version = v"0.0.2"
 
 # Collection of sources required to build RADAR5Builder
 sources = [

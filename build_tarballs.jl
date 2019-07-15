@@ -26,7 +26,14 @@ fi
 
 mkdir -p "${prefix}/${libdir}"
 
-${FC} ${LDFLAGS} -shared -fPIC -O3 -o "${prefix}/${libdir}/libradar5.${dlext}" radar5.f dc_decdel.f decsol.f contr5.f
+if [[ ${nbits} == 32 ]]
+then
+    echo "*** 32-bit BUILD ***"
+    ${FC} ${LDFLAGS} -shared -fPIC -O3 -o "${prefix}/${libdir}/libradar5.${dlext}" radar5.f dc_decdel.f decsol.f contr5.f
+else
+    echo "*** 64-bit BUILD ***"
+    ${FC} ${LDFLAGS} -shared -fPIC -fdefault-integer-8 -O3 -o "${prefix}/${libdir}/libradar5.${dlext}" radar5.f dc_decdel.f decsol.f contr5.f
+fi
 
 """
 
